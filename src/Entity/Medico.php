@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Medico
  * @package App\Entity
  * @ORM\Entity()
+ *
+ * Obs: Para adicionar a ORM ao projeto, devemos utilizar o comando composer require symfony/orm-pack
  */
 class Medico
 {
