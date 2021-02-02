@@ -61,9 +61,11 @@ class MedicosController extends AbstractController
     /**
      * @Route ("/medicos/{id}", methods={"GET"})
      */
-    public function buscarUm(Request $request): Response
+    public function buscarUm(int $id): Response
     {
-        $id = $request->get('id');
+        # Aqui não precisamos passar o Request $request no parâmetro pelo fato de,
+        # nós só precisarmos do $id para fazer a consulta no banco de dados.
+        # Não é necessário buscar nenhum conteúdo (content) além do $id
         $repositorioDeMedicos = $this->getDoctrine()->getRepository(Medico::class);
         $medico = $repositorioDeMedicos->find($id);
         $codigoRetorno = is_null($medico)? Response::HTTP_NO_CONTENT: 200;
@@ -76,10 +78,10 @@ class MedicosController extends AbstractController
      * @return Response
      * @Route("/medicos/{id}", methods={"PUT"})
      */
-    public function atualizar(Request $request): Response
+    public function atualizar(int $id, Request $request): Response
     {
-        $id = $request->get("id");
-
+        # Diferente do metodo buscarUm, aqui precisamos passar o Request $request no parâmetro pelo fato de,
+        # além de buscar o id, eu preciso pegar todos os dados enviado para o update (crm e nome)
         $corpoRequisicao = $request->getContent();
         $dadosEmJson     = json_decode($corpoRequisicao);
 
