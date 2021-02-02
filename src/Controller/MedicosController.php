@@ -110,14 +110,39 @@ class MedicosController extends AbstractController
 
     /**
      * @param int $id
+     * @Route("/medicos/{id}", methods={"DELETE"})
+     */
+    public function delete(int $id): Response{
+
+        $medico = $this->buscaMedico($id);
+
+        if(is_null($medico)){
+            return new Response("Médico não encontrado na base de dados", Response::HTTP_NOT_FOUND);
+        }
+        $this->entityManager->remove($medico);
+        $this->entityManager->flush();
+        return new Response("", Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param int $id
      * @return Medico|object|null
      */
     public function buscaMedico(int $id)
     {
+
         $repsitorioDeMedicos = $this
             ->getDoctrine()
             ->getRepository(Medico::class);
         $medico = $repsitorioDeMedicos->find($id);
         return $medico;
+
+        # A busca pode ser feita utlizando o entityManage->gerReference (na atualização e remoção), mas ainda sim achei melhor
+        # Da primeira forma (acima)
+        /**
+        $repositorioDeMedicos = $this
+            ->entityManager
+            ->getReference(Medico::class,$id);
+        return $repositorioDeMedicos;*/
     }
 }
