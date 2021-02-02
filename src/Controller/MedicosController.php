@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\Medico;
+use App\Helper\MedicoFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,10 +18,15 @@ class MedicosController extends AbstractController
      * @var EntityManagerInterface
      */
     private $entityManager;
+    /**
+     * @var MedicoFactory
+     */
+    private $medicoFactory;
 
-    public function __construct(EntityManagerInterface  $entityManager)
+    public function __construct(EntityManagerInterface  $entityManager, MedicoFactory  $medicoFactory)
     {
         $this->entityManager = $entityManager;
+        $this->medicoFactory = $medicoFactory;
     }
 
     /**
@@ -30,11 +36,8 @@ class MedicosController extends AbstractController
     {
         $corpoRequisicao = $request->getContent();
 
-        $dadosEmJson = json_decode($corpoRequisicao);
-
-        $medico = new Medico();
-        $medico->crm  = $dadosEmJson->crm;
-        $medico->nome = $dadosEmJson->nome;
+        # Chamamos o medicoFactory para receber os dados da requisicão e retornar um obj da classe Medico
+        $medico = $this->medicoFactory->criarMedico($corpoRequisicao);
 
         //Ele persiste o médico. Passa a 'observar' o médico como Entidade nova.
         $this->entityManager->persist($medico);
@@ -66,10 +69,8 @@ class MedicosController extends AbstractController
         # Aqui não precisamos passar o Request $request no parâmetro pelo fato de,
         # nós só precisarmos do $id para fazer a consulta no banco de dados.
         # Não é necessário buscar nenhum conteúdo (content) além do $id
-        $repositorioDeMedicos = $this->getDoctrine()->getRepository(Medico::class);
-        $medico = $repositorioDeMedicos->find($id);
+        $medico = $this->buscaMedico($id);
         $codigoRetorno = is_null($medico)? Response::HTTP_NO_CONTENT: 200;
-
         return new JsonResponse($medico, $codigoRetorno);
     }
 
@@ -82,32 +83,41 @@ class MedicosController extends AbstractController
     {
         # Diferente do metodo buscarUm, aqui precisamos passar o Request $request no parâmetro pelo fato de,
         # além de buscar o id, eu preciso pegar todos os dados enviado para o update (crm e nome)
+
         $corpoRequisicao = $request->getContent();
-        $dadosEmJson     = json_decode($corpoRequisicao);
 
-        $medicoEnviado = new Medico();
-        $medicoEnviado->crm  = $dadosEmJson->crm;
-        $medicoEnviado->nome = $dadosEmJson->nome;
+        # Chamamos o medicoFactory para receber os dados da requisicão e retornar um obj da classe Medico
+        $medicoEnviado = $this->medicoFactory->criarMedico($corpoRequisicao);
 
-        $repsitorioDeMedicos = $this
-            ->getDoctrine()
-            ->getRepository(Medico::class);
-        $medicoExistente = $repsitorioDeMedicos->find($id);
+        $medico = $this->buscaMedico($id);
 
-        if(is_null($medicoExistente)){
+        if(is_null($medico)){
             # Se não achar o médico na base de dados, retorna vazio com o código de não encontrado.
             return new Response("Médico não encontrado para o id $id", Response::HTTP_NOT_FOUND);
         }
 
-        $medicoExistente->crm  = $medicoEnviado->crm;
-        $medicoExistente->nome = $medicoEnviado->nome;
+        $medico->crm  = $medicoEnviado->crm;
+        $medico->nome = $medicoEnviado->nome;
 
-        # $this->entityManager->persist($medicoExistente);
-        # O $this->entityManager->persist($medicoExistente);
+        # $this->entityManager->persist($medico);
+        # O $this->entityManager->persist($medico);
         # não é necessario pelo fato dele já existir. Ele já está sendo 'observado' pelo Doctrine, por isso
         # comentei a linha.
 
         $this->entityManager->flush();
-        return new JsonResponse($medicoExistente);
+        return new JsonResponse($medico);
+    }
+
+    /**
+     * @param int $id
+     * @return Medico|object|null
+     */
+    public function buscaMedico(int $id)
+    {
+        $repsitorioDeMedicos = $this
+            ->getDoctrine()
+            ->getRepository(Medico::class);
+        $medico = $repsitorioDeMedicos->find($id);
+        return $medico;
     }
 }
