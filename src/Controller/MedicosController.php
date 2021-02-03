@@ -96,8 +96,9 @@ class MedicosController extends AbstractController
             return new Response("Médico não encontrado para o id $id", Response::HTTP_NOT_FOUND);
         }
 
-        $medico->crm  = $medicoEnviado->crm;
-        $medico->nome = $medicoEnviado->nome;
+        $medico->setCrm($medicoEnviado->getCrm());
+        $medico->setNome($medicoEnviado->getNome());
+        $medico->setEspecialidade($medicoEnviado->getEspecialidade());
 
         # $this->entityManager->persist($medico);
         # O $this->entityManager->persist($medico);
@@ -130,19 +131,10 @@ class MedicosController extends AbstractController
      */
     public function buscaMedico(int $id)
     {
-
         $repsitorioDeMedicos = $this
             ->getDoctrine()
             ->getRepository(Medico::class);
         $medico = $repsitorioDeMedicos->find($id);
         return $medico;
-
-        # A busca pode ser feita utlizando o entityManage->gerReference (na atualização e remoção), mas ainda sim achei melhor
-        # Da primeira forma (acima)
-        /**
-        $repositorioDeMedicos = $this
-            ->entityManager
-            ->getReference(Medico::class,$id);
-        return $repositorioDeMedicos;*/
     }
 }
