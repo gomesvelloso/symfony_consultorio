@@ -100,6 +100,7 @@ class MedicosController extends AbstractController
         $medico->setNome($medicoEnviado->getNome());
         $medico->setEspecialidade($medicoEnviado->getEspecialidade());
 
+
         # $this->entityManager->persist($medico);
         # O $this->entityManager->persist($medico);
         # não é necessario pelo fato dele já existir. Ele já está sendo 'observado' pelo Doctrine, por isso
