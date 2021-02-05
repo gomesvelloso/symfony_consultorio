@@ -23,10 +23,6 @@ class OlaMundoController
         //Se quiser buscar todos os parametros de uma vez.
         $todosParametros = $request->query->all();
 
-        return new JsonResponse(["mensagem"  => "Olá Mundo, tudo bem?",
-                                 "pathInfo"  => $pathInfo,
-                                 "parametro" => $parametro,
-                                 "todosParametros" => $todosParametros
-                                ]);
+        return new Response(Olá Mundo, tudo bem?");
     }
 }
