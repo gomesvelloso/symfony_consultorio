@@ -58,6 +58,7 @@ class MedicosController extends AbstractController
                                 ->getDoctrine()
                                 ->getRepository(Medico::class);
         $medicoList = $repositorioDeMedicos->findAll();
+        echo "<pre>";print_r($medicoList);exit;
         return new JsonResponse($medicoList);
     }
 
