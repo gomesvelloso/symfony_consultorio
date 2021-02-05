@@ -24,6 +24,7 @@ final class Version20210202174123 extends AbstractMigration
         $this->addSql('ALTER TABLE medico ADD especialidade_id INT NOT NULL');
         $this->addSql('ALTER TABLE medico ADD CONSTRAINT FK_34E5914C3BA9BFA5 FOREIGN KEY (especialidade_id) REFERENCES especialidade (id)');
         $this->addSql('CREATE INDEX IDX_34E5914C3BA9BFA5 ON medico (especialidade_id)');
+
     }
 
     public function down(Schema $schema) : void
