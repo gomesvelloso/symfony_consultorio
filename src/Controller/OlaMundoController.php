@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class OlaMundoController
 {
     /**
-     * @Route("/ola")
+     * @Route("/", methods={"GET"})
      */
     public function olaMundoAction(Request $request): Response
     {
