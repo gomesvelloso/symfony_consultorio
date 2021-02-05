@@ -58,7 +58,14 @@ class MedicosController extends AbstractController
                                 ->getDoctrine()
                                 ->getRepository(Medico::class);
         $medicoList = $repositorioDeMedicos->findAll();
-        return new JsonResponse($medicoList);
+
+        # Devolve o json sem nenhuma formatação
+        #return new JsonResponse($medicoList);
+
+        #Caso queria devolver o json identado, 'formatado'.
+        $response = new JsonResponse($medicoList);
+        $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
+        return $response;
     }
 
     /**
@@ -71,7 +78,14 @@ class MedicosController extends AbstractController
         # Não é necessário buscar nenhum conteúdo (content) além do $id
         $medico = $this->buscaMedico($id);
         $codigoRetorno = is_null($medico)? Response::HTTP_NO_CONTENT: 200;
-        return new JsonResponse($medico, $codigoRetorno);
+
+        # Devolve o json sem nenhuma formatação
+        #return new JsonResponse($medico, $codigoRetorno);
+
+        #Caso queria devolver o json identado, 'formatado'.
+        $response = new JsonResponse($medico, $codigoRetorno);
+        $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
+        return $response;
     }
 
     /**
@@ -99,7 +113,6 @@ class MedicosController extends AbstractController
         $medico->setCrm($medicoEnviado->getCrm());
         $medico->setNome($medicoEnviado->getNome());
         $medico->setEspecialidade($medicoEnviado->getEspecialidade());
-
 
         # $this->entityManager->persist($medico);
         # O $this->entityManager->persist($medico);
