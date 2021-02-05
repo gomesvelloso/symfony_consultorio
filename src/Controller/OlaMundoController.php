@@ -23,6 +23,6 @@ class OlaMundoController
         //Se quiser buscar todos os parametros de uma vez.
         $todosParametros = $request->query->all();
 
-        return new Response(Olá Mundo, tudo bem?");
+        return new Response("Olá Mundo, tudo bem?");
     }
 }
