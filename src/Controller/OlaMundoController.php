@@ -22,7 +22,14 @@ class OlaMundoController
         $parametro = $request->query->get("tic");
         //Se quiser buscar todos os parametros de uma vez.
         $todosParametros = $request->query->all();
-
-        return new Response("Olá Mundo, tudo bem?");
+        $html = '<div style="width: 99%; height: 25%; padding:5px; margin-bottom: 40px">
+                    <div style="margin-top: 60px">
+                        <ul>
+                            <li><a style="font-weight: bold; outline: none; color: #000; text-decoration: none" href="/">Home</a></li> 
+                            <li><a style="font-weight: bold; outline: none; color: #000; text-decoration: none" href="/medicos">Médicos</a></li></ul>
+                        </div>
+                        <hr>
+                 </div>';
+        return new Response($html);
     }
 }
