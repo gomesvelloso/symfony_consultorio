@@ -57,7 +57,7 @@ class MedicosController extends AbstractController
         $repositorioDeMedicos = $this
                                 ->getDoctrine()
                                 ->getRepository(Medico::class);
-        $medicoList = $repositorioDeMedicos->findAll();
+        $medicoList = $repositorioDeMedicos->findBy(array(),array('nome'=>'ASC'));
 
         # Devolve o json sem nenhuma formatação
         #return new JsonResponse($medicoList);

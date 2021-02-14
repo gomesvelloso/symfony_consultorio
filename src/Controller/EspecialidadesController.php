@@ -52,7 +52,7 @@ class EspecialidadesController extends AbstractController
             ->getDoctrine()
             ->getRepository(Especialidade::class);
 
-        $especialidades = $respositorioDeEspecialidades->findAll();
+        $especialidades = $respositorioDeEspecialidades->findBy(array(), array('descricao'=>'ASC'));
 
         $response = new JsonResponse($especialidades);
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
