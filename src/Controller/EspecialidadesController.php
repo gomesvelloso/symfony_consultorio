@@ -57,6 +57,7 @@ class EspecialidadesController extends AbstractController
         $response = new JsonResponse($especialidades);
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
         $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 
@@ -72,6 +73,7 @@ class EspecialidadesController extends AbstractController
         $response = new JsonResponse($especialiadade, $codigoRestorno);
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
         $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
 
     }
 
