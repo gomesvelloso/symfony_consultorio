@@ -39,7 +39,7 @@ class EspecialidadesController extends AbstractController
         $this->entityManager->persist($especialidade);
         $this->entityManager->flush();
 
-        return new JsonResponse($especialidade);
+        $response = new JsonResponse($especialidade);
     }
 
     /**
@@ -54,7 +54,10 @@ class EspecialidadesController extends AbstractController
 
         $especialidades = $respositorioDeEspecialidades->findAll();
 
-        return new JsonResponse($especialidades);
+        $response = new JsonResponse($especialidades);
+        $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
     }
 
     /**
@@ -66,7 +69,10 @@ class EspecialidadesController extends AbstractController
     {
         $especialiadade = $this->buscarEspecialdiade($id);
         $codigoRestorno = is_null($especialiadade) ? Response::HTTP_NO_CONTENT : 200;
-        return new JsonResponse($especialiadade, $codigoRestorno);
+        $response = new JsonResponse($especialiadade, $codigoRestorno);
+        $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
     }
 
     /**
