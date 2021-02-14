@@ -65,6 +65,8 @@ class MedicosController extends AbstractController
         #Caso queria devolver o json identado, 'formatado'.
         $response = new JsonResponse($medicoList);
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
         return $response;
     }
 
@@ -85,6 +87,7 @@ class MedicosController extends AbstractController
         #Caso queria devolver o json identado, 'formatado'.
         $response = new JsonResponse($medico, $codigoRetorno);
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
     }
 
