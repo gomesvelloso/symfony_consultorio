@@ -54,7 +54,6 @@ class EspecialidadesController extends AbstractController
             ->getRepository(Especialidade::class);
 
         $especialidades = $respositorioDeEspecialidades->findBy(array(), array('descricao'=>'ASC'));
-
         $response = new JsonResponse($especialidades);
 
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
@@ -69,10 +68,18 @@ class EspecialidadesController extends AbstractController
      */
     public function buscarUm (int $id): Response
     {
+
         $especialiadade = $this->buscarEspecialdiade($id);
         $codigoRestorno = is_null($especialiadade) ? Response::HTTP_NO_CONTENT : 200;
-        
-        $response = new JsonResponse($especialiadade, $codigoRestorno);
+        $lista = array();
+
+        $lista["id"]  = $especialiadade->getId();
+        $lista["crm"] = $especialiadade->getDescricao();
+        $lista["medicos"] = [];
+        foreach($especialiadade->getMedicos() as $m){
+            array_push($lista["medicos"], $m);
+        }
+        $response = new JsonResponse($lista, $codigoRestorno);
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
         $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
@@ -110,7 +117,6 @@ class EspecialidadesController extends AbstractController
      */
     public function delete(int $id): Response
     {
-
         $especialidade = $this->buscarEspecialdiade($id);
         if(is_null($especialidade)){
             return new Response("Especialidade não encontrada com o id $id", Response::HTTP_NO_CONTENT);
@@ -119,8 +125,6 @@ class EspecialidadesController extends AbstractController
         $this->entityManager->flush();
 
         return new Response("Especialidade ".$especialidade->getDescricao()." removida com sucesso!", 200);
-
-
     }
 
     /**
@@ -147,5 +151,4 @@ class EspecialidadesController extends AbstractController
         }
         return $especialidade;
     }
-
 }

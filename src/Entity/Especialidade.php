@@ -61,9 +61,6 @@ class Especialidade implements \JsonSerializable
      */
     public function getMedicos(): Collection
     {
-        if($this->medicos == null){
-            $this->medicos = new ArrayCollection();
-        }
         return $this->medicos;
     }
 
@@ -91,11 +88,9 @@ class Especialidade implements \JsonSerializable
 
     public function jsonSerialize()
     {
-
         return [
             "id"=>$this->getId(),
-            "descricao"=>$this->getDescricao(),
-            "medicos"=>$this->getMedicos()
+            "descricao"=>$this->getDescricao()
         ];
     }
 }
