@@ -74,7 +74,7 @@ class EspecialidadesController extends AbstractController
         $lista = array();
 
         $lista["id"]  = $especialiadade->getId();
-        $lista["crm"] = $especialiadade->getDescricao();
+        $lista["descricao"] = $especialiadade->getDescricao();
         $lista["medicos"] = [];
         foreach($especialiadade->getMedicos() as $m){
             array_push($lista["medicos"], $m);
