@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Especialidade;
+use App\Entity\Medico;
 use App\Helper\EspecialidadeFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,10 +56,10 @@ class EspecialidadesController extends AbstractController
         $especialidades = $respositorioDeEspecialidades->findBy(array(), array('descricao'=>'ASC'));
 
         $response = new JsonResponse($especialidades);
+
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
         $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
-
     }
 
     /**
@@ -70,11 +71,11 @@ class EspecialidadesController extends AbstractController
     {
         $especialiadade = $this->buscarEspecialdiade($id);
         $codigoRestorno = is_null($especialiadade) ? Response::HTTP_NO_CONTENT : 200;
+        
         $response = new JsonResponse($especialiadade, $codigoRestorno);
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
         $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
-
     }
 
     /**
@@ -128,10 +129,22 @@ class EspecialidadesController extends AbstractController
      */
     public function buscarEspecialdiade(int $id)
     {
+        $especialidade = new Especialidade();
+
         $repositorioDesEspecialidades = $this
             ->getDoctrine()
             ->getRepository(Especialidade::class);
-        $especialidade = $repositorioDesEspecialidades->find($id);
+        $dados = $repositorioDesEspecialidades->find($id);
+
+        $especialidade->setDescricao($dados->getDescricao());
+        $especialidade->setId($dados->getId());
+
+        //Busca os Medicos
+        $repMedico = $this->getDoctrine()->getRepository(Medico::class);
+        $listaMedicos = $repMedico->findBy(array("especialidade"=>$id), array("nome"=> "ASC"));
+        foreach($listaMedicos as $medico){
+            $especialidade->addMedico($medico);
+        }
         return $especialidade;
     }
 

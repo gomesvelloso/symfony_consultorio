@@ -30,6 +30,16 @@ class MedicosController extends AbstractController
     }
 
     /**
+     * @param int $especialidade
+     * @Route("/medicos/especialidades/{especialidadeId}", methods={"GET"})
+     */
+    public function por_especialidade(int $especialidadeId):Response
+    {
+        echo "A";
+
+    }
+
+    /**
      * @Route("/medicos", methods={"POST"})
      */
     public function novo(Request $request): Response
@@ -89,6 +99,7 @@ class MedicosController extends AbstractController
         $response->setEncodingOptions($response->getEncodingOptions() | JSON_PRETTY_PRINT);
         $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
+
     }
 
     /**

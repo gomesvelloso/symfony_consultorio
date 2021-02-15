@@ -30,7 +30,7 @@ class Medico implements \JsonSerializable
      */private $nome;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Especialidade::class)
+     * @ORM\ManyToOne(targetEntity=Especialidade::class, inversedBy="medicos")
      * @ORM\JoinColumn(nullable=false)
      */
     private $especialidade;
